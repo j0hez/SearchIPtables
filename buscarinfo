@@ -1,0 +1,26 @@
+#!/bin/bash
+IPT="/sbin/iptables"
+
+if [ "$#" -le 0 ]; then
+	echo "ERROR: Debes poner algun argumento"
+	echo "Funcionamiento"
+	echo "$ buscarinfo ARG[1] ARG[2]... ARG[n]"
+	echo "> iptables -L -n | grep -i ARG[1] ... | grep -i ARG[n]"
+else
+	
+	t=""
+	
+	for i in "$@"
+	do
+		t+=" | grep -i ${i}"
+	done
+	
+	echo "Mostrando reglas de la tabla Filter"
+	eval $IPT -L -n "$t"
+
+	
+	echo "Mostrando reglas de la tabla NAT"
+	eval $IPT -t nat -L -n "$t"
+
+fi
+
